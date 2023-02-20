@@ -1,0 +1,44 @@
+.modal-user {
+  .content-body {
+    .red-sao {
+      color: red;
+    }
+  }
+}
+
+.manage-users-container {
+  i {
+    padding-right: 7px;
+  }
+  .acions {
+    .refresh {
+      margin-right: 10px;
+    }
+  }
+}
+
+.user-body {
+  .edit {
+    color: orange;
+    cursor: pointer;
+    padding-right: 10px;
+  }
+  .delete {
+    color: red;
+    cursor: pointer;
+  }
+  .post-img {
+    display: block;
+    width: 100px;
+    margin: 0 auto;
+  }
+}
+
+.create-btn {
+  cursor: pointer;
+}
+
+.img-created {
+  width: 100px;
+  height: 150px;
+}

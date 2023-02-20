@@ -1,0 +1,42 @@
+.register-container {
+  padding-top: 20px;
+  background-color: #f0f2f5;
+
+  .content-right {
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    box-sizing: border-box;
+
+    .forgot-Pwt {
+      color: #1877f2;
+
+      &:hover {
+        border-bottom: 1px solid #1877f2;
+      }
+    }
+    .return {
+      a {
+        text-decoration: none;
+      }
+      span {
+        padding-left: 7px;
+      }
+    }
+  }
+
+  .content-left {
+    .content-left-brand {
+      width: 100%;
+      object-fit: cover;
+      img {
+        width: 120px;
+      }
+    }
+    .content-left-detail {
+      color: #1877f2;
+      font-size: 20px;
+      font-weight: 800;
+    }
+  }
+}
