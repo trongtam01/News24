@@ -6,15 +6,11 @@ const sendContact = (data) => {
   });
 };
 
-const deleteContact = (data) => {
-  return axios.delete("/api/contact", {
-    data: {
-      id: data.id,
-    },
-  });
+const deleteContact = (id) => {
+  return axios.delete(`/api/contact/${id}`);
 };
 
-const fetchContact = (data) => {
+const fetchContact = () => {
   return axios.get("/api/contact");
 };
 

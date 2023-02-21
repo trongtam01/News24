@@ -1,52 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { fetchContact } from "../../../services/contactService";
-
-const columns = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 90,
-  },
-  {
-    field: "fullName",
-    headerName: "FullName",
-    width: 150,
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    width: 150,
-  },
-  {
-    field: "dateSent",
-    headerName: "DateSent",
-    width: 150,
-  },
-  {
-    field: "action",
-    headerName: "",
-    width: 150,
-  },
-];
+import { fetchContact, deleteContact } from "../../../services/contactService";
+import MaterialTable from "material-table";
+import { tableIcons } from "../../../setup/iconMat";
 
 const ManageContact = () => {
-  const [pageSize, setPageSize] = useState(5);
-
   const [dataModal, setDataModal] = useState([]);
 
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleEdit = (item) => {
-    console.log("item Contact", item);
-  };
+  const columns = [
+    { title: "ID", field: "id", editable: false },
+    { title: "Name", field: "fullName" },
+    { title: "Email", field: "email" },
+    { title: "Date Sent", field: "dateSent" },
+  ];
 
   async function fetchAllContact() {
     let response = await fetchContact();
@@ -58,30 +23,25 @@ const ManageContact = () => {
     fetchAllContact();
   }, []);
 
-  console.log("dataModal", dataModal);
-  const rows = dataModal.map((item) => ({
-    id: item.id,
-    fullName: item.fullName,
-    email: item.email,
-    dateSent: item.dateSent,
-    action: (
-      <>
-        <button onClick={() => handleEdit(item)}>Delete</button>
-      </>
-    ),
-  }));
-
   return (
     <>
       <div style={{ height: "90vh", width: "100%" }}>
-        <DataGrid
-          rows={rows}
+        <MaterialTable
+          title="Manage Contact"
+          data={dataModal}
           columns={columns}
-          pageSize={pageSize}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5, 10, 20]}
-          checkboxSelection
-          pagination
+          icons={tableIcons}
+          editable={{
+            onRowDelete: async (item) => {
+              console.log("item", item);
+              await deleteContact(item.id);
+              fetchAllContact();
+            },
+          }}
+          options={{
+            actionsColumnIndex: -1,
+            addRowPosition: "first",
+          }}
         />
       </div>
     </>

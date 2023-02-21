@@ -28,6 +28,12 @@ const SidebarAdmin = () => {
               <span>POST</span>
             </li>
           </Link>
+          <Link to="/admin/category">
+            <li>
+              <DashboardIcon className="icon" />
+              <span>CATEGORY</span>
+            </li>
+          </Link>
           <p className="title">CONTACT</p>
           <Link to="/admin/contact">
             <li>

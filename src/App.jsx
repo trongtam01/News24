@@ -1,8 +1,5 @@
 import Footer from "./components/Footer";
-import Header from "./components/Header";
 import Navigation from "./components/Navigation";
-import TopBar from "./components/TopBar";
-import TopBarIcon from "./components/TopBarIcon";
 import AppRoutes from "./routers/AppRoutes";
 import { ToastContainer } from "react-toastify";
 
@@ -19,8 +16,8 @@ const App = () => {
         <Footer />
       </section>
       <ToastContainer
-        position="top-left"
-        autoClose={3000}
+        position="top-right"
+        autoClose={1500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

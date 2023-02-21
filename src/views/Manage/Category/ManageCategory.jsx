@@ -1,120 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { fetchPost, createPost } from "../../../services/postService";
-import ManagePostAdd from "./ManagePostAdd";
-import "./ManagePost.scss";
-import { fetchCategory } from "../../../services/categoryService";
-
-const styleModal = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "90%",
-  height: "90%",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-  flexGrow: 1,
-};
-
-const columns = [
-  {
-    field: "stt",
-    headerName: "STT",
-    width: 90,
-  },
-  {
-    field: "image",
-    headerName: "",
-    width: 150,
-  },
-  {
-    field: "title",
-    headerName: "Title",
-    width: 150,
-  },
-  {
-    field: "author",
-    headerName: "Author",
-    width: 150,
-  },
-  {
-    field: "action",
-    headerName: "Action",
-    width: 150,
-  },
-];
+import {
+  fetchCategory,
+  createNewCategory,
+  updateCategory,
+  deleteCategory,
+} from "../../../services/categoryService";
+import MaterialTable from "material-table";
+import { tableIcons } from "../../../setup/iconMat";
+import { toast } from "react-toastify";
 
 const ManageCategory = () => {
-  const [pageSize, setPageSize] = useState(5);
-
   const [dataModal, setDataModal] = useState([]);
 
-  const [open, setOpen] = React.useState(false);
-
-  const [category, setCategory] = useState([]);
-
   useEffect(() => {
-    fetchAllPost();
-    getCategory();
+    fetchAllCategory();
   }, []);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const columns = [
+    { title: "ID", field: "id", editable: false },
+    { title: "Title", field: "title" },
+    { title: "Description", field: "description" },
+  ];
 
-  const handleEdit = (item) => {};
-
-  const rows = dataModal.map((item, index) => ({
-    stt: index + 1,
-    image: "image",
-    title: "Title",
-    author: "author.name",
-    action: <button onClick={() => handleEdit(item)}>Click me</button>,
-  }));
-
-  async function fetchAllPost() {
-    let response = await fetchPost();
-    if (response) {
-      setDataModal(dataModal);
-    }
-  }
-
-  async function getCategory() {
-    let res = await fetchCategory();
-    setCategory(res);
+  async function fetchAllCategory() {
+    let response = await fetchCategory();
+    setDataModal(response);
   }
 
   return (
     <>
-      <div style={{ height: "85vh", width: "100%" }}>
-        <div className="create-btn" onClick={() => handleOpen()}>
-          Create new Post
-        </div>
-        <DataGrid
-          rows={rows}
+      <div style={{ height: "90vh", width: "100%" }}>
+        <MaterialTable
+          title="Manage Category"
+          data={dataModal}
           columns={columns}
-          pageSize={pageSize}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5, 10, 20]}
-          pagination
+          icons={tableIcons}
+          editable={{
+            onRowAdd: async (item) => {
+              try {
+                await createNewCategory(item);
+                toast.success("Create category success");
+                fetchAllCategory();
+              } catch (e) {
+                toast.error(e);
+              }
+            },
+            onRowUpdate: async (item) => {
+              try {
+                await updateCategory(item.id, item);
+                toast.success("Update category success");
+                fetchAllCategory();
+              } catch (e) {
+                toast.error(e);
+              }
+            },
+            onRowDelete: async (item) => {
+              try {
+                await deleteCategory(item.id);
+                toast.success("Delete category success");
+                fetchAllCategory();
+              } catch (e) {
+                toast.error(e);
+              }
+            },
+          }}
+          options={{
+            actionsColumnIndex: -1,
+            addRowPosition: "first",
+            sorting: true,
+            exportButton: true,
+          }}
         />
       </div>
-      <ManagePostAdd
-        styleModal={styleModal}
-        handleClose={handleClose}
-        open={open}
-        category={category}
-      />
     </>
   );
 };
 
-export default ManagePost;
+export default ManageCategory;
