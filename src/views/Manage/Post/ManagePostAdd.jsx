@@ -17,6 +17,7 @@ import Button from "@mui/material/Button";
 const defaultImageSrc = "/img/noimg.png";
 
 const initialFieldValues = {
+  id: 0,
   title: "",
   description: "",
   content: "",
@@ -28,7 +29,7 @@ const initialFieldValues = {
 };
 
 const ManagePostAdd = (props) => {
-  const { styleModal, handleClose, open, category } = props;
+  const { styleModal, handleClose, open, category, addOrEdit } = props;
 
   const [values, setValues] = useState(initialFieldValues);
 
@@ -84,9 +85,18 @@ const ManagePostAdd = (props) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", values.id);
+    formData.append("title", values.title);
+    formData.append("description", values.description);
+    formData.append("content", values.content);
+    formData.append("categoryId", values.categoryId);
+    formData.append("published", values.published);
+    formData.append("imageName", values.imageName);
+    formData.append("imageFile", values.imageFile);
     console.log(values);
-    await createPost(values);
-    retsetForm();
+    console.log(formData);
+    await addOrEdit(formData, retsetForm);
   };
 
   return (
@@ -97,7 +107,11 @@ const ManagePostAdd = (props) => {
       aria-describedby="parent-modal-description"
     >
       <Box sx={{ ...styleModal }}>
-        <form method="post" onSubmit={(e) => handleFormSubmit(e)}>
+        <form
+          autoComplete="off"
+          noValidate
+          onSubmit={(e) => handleFormSubmit(e)}
+        >
           <Grid container spacing={1}>
             <Grid item xs={9}>
               <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
@@ -149,8 +163,8 @@ const ManagePostAdd = (props) => {
                   onChange={(e) => handleInputChange(e)}
                   helperText="Please select your currency"
                 >
-                  {category.map((option, index) => (
-                    <MenuItem key={index} value={option.id}>
+                  {category.map((option) => (
+                    <MenuItem key={option.id} value={option.id}>
                       {option.title}
                     </MenuItem>
                   ))}
@@ -185,6 +199,9 @@ const ManagePostAdd = (props) => {
           </Grid>
           <Button type="submit" variant="contained">
             Add
+          </Button>
+          <Button onClick={() => handleClose()} variant="contained">
+            Close
           </Button>
         </form>
       </Box>

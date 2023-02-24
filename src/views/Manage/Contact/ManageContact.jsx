@@ -33,7 +33,6 @@ const ManageContact = () => {
           icons={tableIcons}
           editable={{
             onRowDelete: async (item) => {
-              console.log("item", item);
               await deleteContact(item.id);
               fetchAllContact();
             },

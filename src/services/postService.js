@@ -5,10 +5,12 @@ const fetchPost = () => {
 };
 
 const createPost = (data) => {
-  console.log("data", data);
-  return axios.post(`/api/post`, {
-    ...data,
-  });
+  console.log("createPost", data);
+  return axios.post("/api/post", data);
 };
 
-export { fetchPost, createPost };
+const getPostById = (id) => {
+  return axios.get(`/api/post/${id}`);
+};
+
+export { fetchPost, createPost, getPostById };

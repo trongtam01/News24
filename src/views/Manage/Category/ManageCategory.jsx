@@ -39,6 +39,7 @@ const ManageCategory = () => {
             onRowAdd: async (item) => {
               try {
                 await createNewCategory(item);
+                console.log("itemCate", item);
                 toast.success("Create category success");
                 fetchAllCategory();
               } catch (e) {

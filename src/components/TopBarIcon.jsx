@@ -11,7 +11,7 @@ const TopBarIcon = () => {
   const { user, logoutContext } = useContext(UserContext);
 
   const handleLogOut = async () => {
-    let data = await logoutUser(); //clear cookie
+    await logoutUser(); //clear cookie
     localStorage.removeItem("jwtNews24"); // clear localstorge
     logoutContext(); //clear user contact
     navigate("/login");

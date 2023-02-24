@@ -4,14 +4,15 @@ import { fetchPost, createPost } from "../../../services/postService";
 import ManagePostAdd from "./ManagePostAdd";
 import "./ManagePost.scss";
 import { fetchCategory } from "../../../services/categoryService";
+import axios from "axios";
 
 const styleModal = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "90%",
-  height: "90%",
+  width: "100%",
+  height: "100%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -25,27 +26,27 @@ const columns = [
   {
     field: "stt",
     headerName: "STT",
-    width: 90,
-  },
-  {
-    field: "image",
-    headerName: "",
     width: 150,
   },
   {
     field: "title",
     headerName: "Title",
-    width: 150,
+    width: 200,
   },
   {
-    field: "author",
-    headerName: "Author",
-    width: 150,
+    field: "description",
+    headerName: "Description",
+    width: 250,
   },
   {
-    field: "action",
-    headerName: "Action",
-    width: 150,
+    field: "content",
+    headerName: "Content",
+    width: 300,
+  },
+  {
+    field: "published",
+    headerName: "Published",
+    width: 100,
   },
 ];
 
@@ -58,10 +59,28 @@ const ManagePost = () => {
 
   const [category, setCategory] = useState([]);
 
+  const [recordForEdit, setRecordForEdit] = useState(null);
+
   useEffect(() => {
-    fetchAllPost();
+    refreshPost();
     getCategory();
   }, []);
+
+  const postAPI = (url = "http://localhost:5215/api/Post/") => {
+    return {
+      fetchAll: () => axios.get(url),
+      create: (newRecord) => axios.post(url, newRecord),
+      update: (id, updateRecord) => axios.put(url + id, updateRecord),
+      delete: (id) => axios.delete(url + id),
+    };
+  };
+
+  function refreshPost() {
+    postAPI()
+      .fetchAll()
+      .then((res) => setDataModal(res.data))
+      .catch((err) => console.log(err));
+  }
 
   const handleOpen = () => {
     setOpen(true);
@@ -70,27 +89,35 @@ const ManagePost = () => {
     setOpen(false);
   };
 
-  const handleEdit = (item) => {};
-
-  const rows = dataModal.map((item, index) => ({
-    stt: index + 1,
-    image: "image",
-    title: "Title",
-    author: "author.name",
-    action: <button onClick={() => handleEdit(item)}>Click me</button>,
-  }));
-
-  async function fetchAllPost() {
-    let response = await fetchPost();
-    if (response) {
-      setDataModal(dataModal);
-    }
-  }
-
   async function getCategory() {
     let res = await fetchCategory();
     setCategory(res);
   }
+
+  const showRecordDetails = (data) => {
+    setRecordForEdit(data);
+  };
+
+  const addOrEdit = (formData, onSuccess) => {
+    if (formData.get("id") == "0") {
+      console.log(formData);
+      postAPI()
+        .create(formData)
+        .then((res) => {
+          onSuccess();
+          refreshPost();
+        })
+        .catch((err) => console.log(err));
+    } else {
+      postAPI()
+        .update(formData.get("id"), formData)
+        .then((res) => {
+          onSuccess();
+          refreshPost();
+        })
+        .catch((err) => console.log(err));
+    }
+  };
 
   return (
     <>
@@ -99,7 +126,7 @@ const ManagePost = () => {
           Create new Post
         </div>
         <DataGrid
-          rows={rows}
+          rows={dataModal}
           columns={columns}
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
@@ -112,6 +139,7 @@ const ManagePost = () => {
         handleClose={handleClose}
         open={open}
         category={category}
+        addOrEdit={addOrEdit}
       />
     </>
   );

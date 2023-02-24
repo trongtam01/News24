@@ -1,25 +1,25 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import {
-  NavLink,
-  Link,
-  useLocation,
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import React, { useContext } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import TopBar from "./TopBar";
 import TopBarIcon from "./TopBarIcon";
 import Header from "./Header";
 
 const Navigation = () => {
+  const { id } = useParams();
+
   const { user } = useContext(UserContext);
+
   const location = useLocation();
+
+  console.log("id", id);
 
   if (
     (user && user.isAuthenticated === true) ||
     location.pathname === "/" ||
     location.pathname === "/contact" ||
-    location.pathname === "/blog"
+    location.pathname === "/blog" ||
+    location.pathname === `/detail-post/${id}`
   ) {
     return (
       <>

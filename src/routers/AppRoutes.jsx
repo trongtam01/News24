@@ -9,6 +9,7 @@ import PostNewsAdmin from "../admin/manages/post_news/PostNewsAdmin";
 import Contact from "../views/Contact/Contact";
 import ContactAdmin from "../admin/manages/contact/ContactAdmin";
 import CategoryAdmin from "../admin/manages/category/CategoryAdmin";
+import DetailPost from "../views/Manage/News/DetailPost";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
         {/* <Route path="/404" element={<NotFoundPage />} /> */}
         <Route path="/blog" element={<Blog />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path={"/detail-post/:id"} element={<DetailPost />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AppAdmin />} />

@@ -32,11 +32,6 @@ const Header = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/blog" className="nav-link">
-                  Blog <span className="sr-only">(current)</span>
-                </NavLink>
-              </li>
-              <li className="nav-item">
                 <NavLink to="/contact" className="nav-link">
                   Contact <span className="sr-only">(current)</span>
                 </NavLink>
